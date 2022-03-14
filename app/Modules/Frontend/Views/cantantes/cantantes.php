@@ -3,9 +3,9 @@
     <div class="panel-heading text-center">
         <b style="font-size: 16px">Listado de Cantantes</b>             
         <span class="pull-right"> 
-            <button type="button" class="btn btn-xs" onclick='ruta("usercrud")'><i class="fad fa-plus" aria-hidden="true"></i>                    
+            <a href="<?= base_url('cantantes') ?>" class="btn btn-xs"><i class="fad fa-plus" aria-hidden="true"></i>                    
                 <i class="glyphicon glyphicon-refresh"></i>
-            </button>
+            </a>
             &nbsp;
             <button type="button" class="btn btn-xs" onclick='carga_modal("form")'><i class="fad fa-plus" aria-hidden="true"></i>                    
                 <i class="glyphicon glyphicon-plus-sign"></i> <b>Nuevo</b> 

@@ -1,6 +1,6 @@
 <?php namespace App\Modules\Backend\Controllers;
 
-// use CodeIgniter\RESTful\ResourceController;
+// use CodeIgniter\RESTful\ResourceController;          
 use App\Controllers\BaseController;
 use CodeIgniter\API\ResponseTrait;
 use App\Modules\Backend\Models\CantanteModel;
@@ -43,7 +43,13 @@ class Cantantes extends BaseController
     public function form()
     {          
         $id = $this->request->getGet('id');
-        echo view($this->frontend. '\cantantes\form_cantante', ['cantante' => ($id ? $this->model->find($id) : [])]);	
+        $render_view = \Config\Services::renderer(); 
+        $render_view->setVar('cantante', ($id ? $this->model->find($id) : []) );
+
+        $view = $render_view->render($this->frontend. '\cantantes\form_cantante');
+        $title = ($id ? 'Editar ' : 'Nuevo '). 'Cantante';
+
+        echo json_encode(compact('title', 'view'));
     }    
 
     
@@ -52,7 +58,6 @@ class Cantantes extends BaseController
         $post = json_decode(file_get_contents('php://input'), true) ? : $this->request->getPost();
         $response['success'] = 'Datos correctamente guardados';
         
-
         $data = [
           'nombre' => isset($post['nombre']) ? $post['nombre'] : '',
           'fecha_nac' => isset($post['fecha_nac']) ? $post['fecha_nac'] : '',
@@ -61,10 +66,7 @@ class Cantantes extends BaseController
           'biografia' => isset($post['biografia']) ? $post['biografia'] : '',         
         ];   
     
-        if($id = $post['id']){
-          //  $this->model->where('id', $id)->update($data);   
-            $this->model->where('id', $id)->set($data)->update();         
-        }    
+        if($id = $post['id']) { $this->model->where('id', $id)->set($data)->update(); }    
         else { $this->model->insert($data); }    
 
         if($errors = $this->model->errors()) { 
@@ -76,26 +78,14 @@ class Cantantes extends BaseController
     }
  
 
-/*
-  -------------------------------------------------------------------
-  Nombre: ajax_list
-  -------------------------------------------------------------------
-  Descripción:
-  devuelve los registros de los usuarios para ser cargados mediante datatables
-  -------------------------------------------------------------------
-  Entradas: $_POST
-  -------------------------------------------------------------------
-  Salida: arreglo en formato json
-  -------------------------------------------------------------------
- */
+/* devuelve los registros de los usuarios para ser cargados mediante datatables */
 public function ajax_list() 
 {
    $data = [];
    foreach ($this->get_records(TRUE) as $r) 
    {
      $fn_edit = "carga_modal('" .'form?id=' . $r->id . "')";
-     $fn_delete = "carga_modal('" .'delete?id=' . $r->id . "')";
-     // $fn_delete = "if(confirm('Desea borrar el usuario?')) { ruta('" .'usercrud/add?id=' . $r->ID . "'); }";
+     $fn_delete = "carga_modal('" .'form_delete?id=' . $r->id . "')";    
 
      $fila = [];
      $fila[] = "<div align='center'>$r->nombre</div>";
@@ -122,18 +112,11 @@ public function ajax_list()
  }    
     
 
-
 /*
-    Nombre: get_records
-    -------------------------------------------------------------------
     Descripción: Retorna los Usuarios de acuerdo a los parametros solicicitados
     -------------------------------------------------------------------
-    Entradas:
-    $_POST
+    Entradas: $_POST 
     $order_by: si es verdadero devuelve el arreglo con los resultados para generar el contenido de datatables
-    -------------------------------------------------------------------
-    Salida: int o arreglo
-  
 */      
 public function get_records($order_by=FALSE) 
 {   
@@ -152,22 +135,31 @@ public function get_records($order_by=FALSE)
 }      
 
 
+public function form_delete()
+{         
+    $id = $this->request->getGet('id');
+    $render_view = \Config\Services::renderer(); 
+    $render_view->setVar('id', $id);
+
+    $view = $render_view->render($this->frontend. '\cantantes\form_delete');
+    $title = 'Borar Registro';
+
+    echo json_encode(compact('title', 'view'));
+}  
+
+
+public function delete()
+{                
+    if($this->request->getPost('send'))
+    {
+        $this->model->query('DELETE FROM cantantes WHERE id = '. intval($this->request->getPost('id')));
+        echo json_encode(['success' => 'El registro se borró correctamente.']);
+    }
+    
+}
+
+
 } // Finaliza la clase
 
 
 
-
-    /*
-    public function delete()
-    {                
-        if($id = $this->request->getPost('id')) 
-        {
-            $this->model->query('DELETE FROM empleados WHERE id = '. $id);
-            $this->model->query('DELETE FROM empleado_rol WHERE empleado_id = '. $id);
-            
-            session()->setFlashdata('success', 'Registro borrado satisfactoriamente.');
-        }
-        
-        return redirect()->to('empleados');
-    }    */
-    

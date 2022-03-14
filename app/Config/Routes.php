@@ -38,6 +38,9 @@ $routes->get('/', '\App\Modules\Backend\Controllers\Cantantes::index');
 $routes->get('cantantes', '\App\Modules\Backend\Controllers\Cantantes::index');
 $routes->get('save', '\App\Modules\Backend\Controllers\Cantantes::save');
 $routes->post('save', '\App\Modules\Backend\Controllers\Cantantes::save');
+$routes->get('save', '\App\Modules\Backend\Controllers\Cantantes::save');
+$routes->get('form_delete', '\App\Modules\Backend\Controllers\Cantantes::form_delete');
+$routes->post('delete', '\App\Modules\Backend\Controllers\Cantantes::delete');
 $routes->post('ajax_list', '\App\Modules\Backend\Controllers\Cantantes::ajax_list');
 $routes->get('form', '\App\Modules\Backend\Controllers\Cantantes::form');
 

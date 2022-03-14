@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 08, 2021 at 10:36 PM
+-- Generation Time: Mar 14, 2022 at 09:51 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -18,49 +18,43 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ci4_rest`
+-- Database: `solstar`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Producto`
+-- Table structure for table `cantantes`
 --
 
-CREATE TABLE `Producto` (
-  `id_Producto` int(11) NOT NULL,
-  `Producto_nombre` varchar(200) DEFAULT NULL,
-  `Producto_precio` double DEFAULT NULL
+CREATE TABLE `cantantes` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(200) NOT NULL,
+  `fecha_nac` date NOT NULL,
+  `genero` char(1) NOT NULL,
+  `biografia` text NOT NULL,
+  `foto` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `Producto`
---
-
-INSERT INTO `Producto` (`id_Producto`, `Producto_nombre`, `Producto_precio`) VALUES
-(1, 'Java Developer', 39000),
-(2, 'CodeIgniter Framework', 39000),
-(3, 'PHP Frameworks', 59000);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `Producto`
+-- Indexes for table `cantantes`
 --
-ALTER TABLE `Producto`
-  ADD PRIMARY KEY (`id_Producto`);
+ALTER TABLE `cantantes`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `Producto`
+-- AUTO_INCREMENT for table `cantantes`
 --
-ALTER TABLE `Producto`
-  MODIFY `id_Producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `cantantes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
